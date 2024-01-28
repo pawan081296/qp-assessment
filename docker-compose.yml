@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  qp-asssesment:
+    build:
+      context: .
+    container_name: qp-assessment
+    image: qp_assesment:latest
+    ports:
+      - "8080:8080"
+    environment:
+        SPRING_PROFILES_ACTIVE: dev
+    networks:
+      springboot-mysql-net:
+    #    volumes:
+    #      - "./server/src:/build/src"
+    depends_on:
+      - docker-mysql
+  docker-mysql:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      - MYSQL_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=qp-assessment
+    ports:
+      - "3306:3306"
+    volumes:
+      - db:/var/lib/mysql
+volumes:
+  db:
+networks:
+  springboot-mysql-net:
